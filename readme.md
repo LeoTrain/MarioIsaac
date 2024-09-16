@@ -38,9 +38,9 @@ To run the game locally, follow these steps:
     pip install -r requirements.txt
     ```
 
-3. Run the game:
+3. Run the game from outside of the folder:
     ```bash
-    python main.py
+    python3 -m MarioIsaac.main
     ```
 
 Make sure you have Python and Pygame installed!
