@@ -3,10 +3,30 @@
         "height": 4300,
         "width": 2
     },
-    "activeFile": "",
+    "activeFile": "/Users/ftl/lab/git/MarioIsaac/maps/level_one_player_center.tmx",
     "expandedProjectPaths": [
     ],
+    "file.lastUsedOpenFilter": "All Files (*)",
     "fileStates": {
+        "/Users/ftl/lab/git/MarioIsaac/maps/TileThatShit.tsx": {
+            "scaleInDock": 1
+        },
+        "/Users/ftl/lab/git/MarioIsaac/maps/level_one.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 442,
+                "y": 293
+            }
+        },
+        "/Users/ftl/lab/git/MarioIsaac/maps/level_one_player_center.tmx": {
+            "scale": 0.5,
+            "selectedLayer": 2,
+            "viewCenter": {
+                "x": 444,
+                "y": 293
+            }
+        }
     },
     "last.imagePath": "/Users/ftl/lab/git/MarioIsaac/assets/background",
     "map.height": 64,
@@ -15,9 +35,12 @@
     "map.tileWidth": 64,
     "map.width": 64,
     "openFiles": [
+        "/Users/ftl/lab/git/MarioIsaac/maps/level_one_player_center.tmx"
     ],
     "project": "level_one.tiled-project",
     "recentFiles": [
+        "/Users/ftl/lab/git/MarioIsaac/maps/level_one_player_center.tmx",
+        "/Users/ftl/lab/git/MarioIsaac/maps/level_one.tmx"
     ],
     "tileset.lastUsedFormat": "tsx",
     "tileset.tileSize": {

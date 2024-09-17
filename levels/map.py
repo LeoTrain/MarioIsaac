@@ -26,25 +26,26 @@ class Map:
                 for x, y, gid in layer:
                     if gid != 0:
                         tile = Tile(surface)
+                        tile.rect.center = (x * self.tile_size, y * self.tile_size)
                         collision_tiles.append(tile)
         return collision_tiles
 
     def get_player_starting_position(self):
         x_start = 0
         y_start = 0
-        for layer in self.tmx_data.visible_layers:
-            if "Player" in layer.name:
-                for x, y, gid in layer:
-                    x_start = x
-                    y_start = y
+        for obj in self.tmx_data.objects:
+            print(obj)
+            if obj.name == "player_spawn":
+                x_start = obj.x
+                y_start = obj.y
         return (x_start, y_start)
 
-    def get_enemies_starting_position(self, enemy_type):
+    def get_enemies_starting_position(self):
         enemies_starting_positions = []
         x_start = 0
         y_start = 0
         for layer in self.tmx_data.visible_layers:
-            if "Enemy_" + enemy_type in layer.name:
+            if "Enemy" in layer.name:
                 for x, y, gid in layer:
                     x_start = x
                     y_start = y
