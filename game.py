@@ -2,11 +2,10 @@ import pygame
 
 from .levels.level import Level
 
-
 class Game:
-
     def __init__(self):
         pygame.init()
+        self.DEAD = pygame.USEREVENT +1
         self.display_width, self.display_height = 800, 600
         self.display = pygame.display.set_mode(
             (self.display_width, self.display_height)
@@ -34,6 +33,8 @@ class Game:
                         entity.color_mask = not entity.color_mask
                 elif event.key == pygame.K_SPACE:
                     self.level.player.attack()
+                elif event.type == self.DEAD:
+                    self.running = False
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
