@@ -11,13 +11,13 @@ class Map:
         self.height = self.tmx_data.height
         self.tile_size = 64
 
-    def render(self, surface):
+    def render(self, surface, offset_x, offset_y):
         for layer in self.tmx_data.visible_layers:
             if isinstance(layer, pytmx.TiledTileLayer):
                 for x, y, gid in layer:
                     tile = self.tmx_data.get_tile_image_by_gid(gid)
                     if tile:
-                        surface.blit(tile, (x * self.tile_size, y * self.tile_size))
+                        surface.blit(tile, (x * self.tile_size - offset_x, y * self.tile_size - offset_y))
 
     def get_collision_tiles(self, surface):
         collision_tiles = []
@@ -38,3 +38,15 @@ class Map:
                     x_start = x
                     y_start = y
         return (x_start, y_start)
+
+    def get_enemies_starting_position(self, enemy_type):
+        enemies_starting_positions = []
+        x_start = 0
+        y_start = 0
+        for layer in self.tmx_data.visible_layers:
+            if "Enemy_" + enemy_type in layer.name:
+                for x, y, gid in layer:
+                    x_start = x
+                    y_start = y
+                    enemies_starting_positions.append((x_start, y_start))
+        return enemies_starting_positions
