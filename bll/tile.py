@@ -30,9 +30,7 @@ class Tile(pygame.sprite.Sprite):
     def draw(self, offset_x, offset_y):
         self.display.blit(self.image, (self.rect.x - offset_x, self.rect.y - offset_y))
         if self.draw_rect_border:
-            pygame.draw.rect(
-                self.display, (255, 0, 0), self.rect.move(-offset_x, -offset_y), 1
-            )
+            pygame.draw.rect(self.display, (255, 0, 0), self.rect.move(-offset_x, -offset_y), 1)
         if self.color_mask:
             self.draw_mask(offset_x, offset_y)
 

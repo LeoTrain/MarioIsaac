@@ -59,7 +59,7 @@ class Game:
         while self.running:
             self.handle_events()
             self.level.update()
-            self.level.draw()
+            self.level.render()
 
             self.clock.tick(self.fps)
         pygame.quit()
