@@ -26,7 +26,7 @@ class Map:
                 for x, y, gid in layer:
                     if gid != 0:
                         tile = Tile(surface)
-                        tile.rect.center = (x * self.tile_size, y * self.tile_size)
+                        tile.rect.topleft = (x * self.tile_size, y * self.tile_size)
                         collision_tiles.append(tile)
         return collision_tiles
 
