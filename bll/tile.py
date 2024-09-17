@@ -8,7 +8,7 @@ class Tile(pygame.sprite.Sprite):
         if image is not None:
             self.image = image
         else:
-            self.image = pygame.Surface((100, 100))
+            self.image = pygame.Surface((64, 64))
         self.mask = pygame.mask.from_surface(self.image)
         self.rect = self.image.get_rect()
         self.old_rect = self.rect.copy()
