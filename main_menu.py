@@ -16,7 +16,7 @@ class MainMenu:
             text = self.font.render(option, True, color)
             text_rect = text.get_rect(center=(self.surface.get_width() // 2, 150 + i * 60))
             self.surface.blit(text, text_rect)
-            pygame.display.update()
+        pygame.display.update()
 
     def handle_input(self):
         for event in pygame.event.get():
