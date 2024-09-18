@@ -65,7 +65,6 @@ class Goblin(BaseCharacter):
         return can_attack
 
     def attack(self, player):
-        print('hello')
         super().attack()
         self.attack_start_time = time.time()
         player.take_damage(self.attack_power)

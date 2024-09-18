@@ -26,6 +26,7 @@ class Player(BaseCharacter):
             "attack": 8,
         }
         self.life_points = self.starting_life_points = 5
+        self.attack_power = 3
 
     def update_current_state(self):
         keys = pygame.key.get_pressed()
@@ -39,11 +40,26 @@ class Player(BaseCharacter):
         else:
             self.current_state = "idle"
 
-    def take_damage(self, damage):
-        self.life_points -= damage
-        if self.life_points <= 0:
-            event = pygame.event.Event(event_dick["player_dead"])
-            pygame.event.post(event)
+    def attack(self, enemies):
+        super().attack()
+        attack_rect = self.rect.copy()
+        attack_size = 20
+
+        if self.last_pressed_direction == "left":
+            attack_rect.width += attack_size
+            attack_rect.x -= attack_size
+        elif self.last_pressed_direction == "right":
+            attack_rect.width += attack_size
+        elif self.last_pressed_direction == "up":
+            attack_rect.height += attack_size
+            attack_rect.y -= attack_size
+        elif self.last_pressed_direction == "down":
+            attack_rect.height += attack_size
+
+        for enemy in enemies:
+            if attack_rect.colliderect(enemy.rect):
+                enemy.take_damage(self.attack_power)
+
 
     def update(self):
         self.update_current_state()

@@ -1,6 +1,9 @@
+import pygame
+
 from ..bll.moving_tile import MovingTile
 from ..bll.sprite_loader import SpriteLoader
 from ..bll.animation_controller import AnimationController
+from ..bll.event_dick import event_dick
 
 
 class BaseCharacter(MovingTile, SpriteLoader, AnimationController):
@@ -15,3 +18,15 @@ class BaseCharacter(MovingTile, SpriteLoader, AnimationController):
 
     def attack(self):
         self.current_state = "attack"
+
+    def take_damage(self, damage):
+        from ..bll.player import Player
+        from ..bll.goblin import Goblin
+        self.life_points -= damage
+        if self.life_points <= 0:
+            if isinstance(self, Player):
+                event = pygame.event.Event(event_dick["player_dead"])
+                pygame.event.post(event)
+            elif isinstance(self, Goblin):
+                event = pygame.event.Event(event_dick["enemy_dead"])
+                pygame.event.post(event)

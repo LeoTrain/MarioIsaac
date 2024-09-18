@@ -8,18 +8,14 @@ class Game:
     def __init__(self):
         pygame.init()
         self.display_width, self.display_height = 800, 600
-        self.display = pygame.display.set_mode(
-            (self.display_width, self.display_height)
-        )
+        self.display = pygame.display.set_mode((self.display_width, self.display_height))
         self.running = True
         self.clock = pygame.time.Clock()
         self.fps = 60
-
         self.level = Level(self.display)
-        self.main_menu = MainMenu(self.display)
-
-        self.main_menu_active = True
         self.level_active = False
+        self.main_menu = MainMenu(self.display)
+        self.main_menu_active = True
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -37,10 +33,14 @@ class Game:
                     for entity in self.level.enemies:
                         entity.color_mask = not entity.color_mask
                 elif event.key == pygame.K_SPACE:
-                    self.level.player.attack()
+                    self.level.player.attack(self.level.enemies)
             elif event.type == event_dick["player_dead"]:
                 self.level_active = False
                 self.main_menu_active = True
+            elif event.type == event_dick["enemy_dead"]:
+                for i, enemy in enumerate(self.level.enemies):
+                    if enemy.life_points <= 0:
+                        self.level.enemies.pop(i)
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -74,6 +74,9 @@ class Game:
                 self.handle_events()
                 self.level.update()
                 self.level.render()
+
+            for enemy in self.level.enemies:
+                print(f"{enemy.life_points}")
 
             self.clock.tick(self.fps)
         pygame.quit()
