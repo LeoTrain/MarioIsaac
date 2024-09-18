@@ -42,7 +42,7 @@ class Player(BaseCharacter):
     def take_damage(self, damage):
         self.life_points -= damage
         if self.life_points <= 0:
-            event = pygame.event.Event(self.DEAD)
+            event = pygame.event.Event(DEAD)
             pygame.event.post(event)
 
     def update(self):
