@@ -47,9 +47,15 @@ class Level(CollisionHandler):
         self.camera_offset_y = self.player.rect.centery - self.surface.get_height() // 2
 
     def _draw_hearts(self):
-        for i in range(self.player.starting_life_points):
-            x = self.surface.get_width() - self.heart_alive_image.get_width() - self.heart_alive_image.get_width() * i
-            self.surface.blit(self.heart_alive_image, (x, 100))
+        dead = self.player.starting_life_points - self.player.life_points
+        heart_width = self.heart_alive_image.get_width()
+        x_pos = self.surface.get_width() - heart_width
+        for i in range(self.player.life_points):
+            x_pos -= heart_width
+            self.surface.blit(self.heart_alive_image, (x_pos, 50))
+        for i in range(dead):
+            x_pos -= heart_width
+            self.surface.blit(self.heart_dead_image, (x_pos, 50))
 
     def render(self):
         self.surface.fill((255, 255, 255))
