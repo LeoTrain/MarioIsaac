@@ -25,7 +25,7 @@ class Player(BaseCharacter):
             "run": 8,
             "attack": 8,
         }
-        self.life_points = 20
+        self.life_points = self.starting_life_points = 5
 
     def update_current_state(self):
         keys = pygame.key.get_pressed()
