@@ -25,7 +25,8 @@ class Player(BaseCharacter):
             "attack": 8,
         }
         self.life_points = 20
-   
+        self.DEAD = pygame.USEREVENT + 1
+
     def update_current_state(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a] or keys[pygame.K_d] or keys[pygame.K_w] or keys[pygame.K_s]:
@@ -41,8 +42,7 @@ class Player(BaseCharacter):
     def take_damage(self, damage):
         self.life_points -= damage
         if self.life_points <= 0:
-            DEAD = pygame.USEREVENT + 1
-            event = pygame.event.Event(DEAD)
+            event = pygame.event.Event(self.DEAD)
             pygame.event.post(event)
 
     def update(self):
