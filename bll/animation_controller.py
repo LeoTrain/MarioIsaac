@@ -28,11 +28,11 @@ class AnimationController:
     def _update_mask(self):
         self.mask = pygame.mask.from_surface(self.image)
 
-    def _select_state_image(self) -> None:
-        frame_count = self.frame_counts.get(self.current_state, 0)
-        state_up = self.current_state + "_up"
-        state_down_right = self.current_state + "_down_right"
-        state_down_left = self.current_state + "_down_left"
+    def select_state_image(self, state: str) -> None:
+        frame_count = self.frame_counts.get(state, 0)
+        state_up = state + "_up"
+        state_down_right = state + "_down_right"
+        state_down_left = state + "_down_left"
         if self.current_y_direction == "up":
             self.image = self.sprites[state_up][self.current_frame_index // frame_count]
         else:
@@ -42,7 +42,12 @@ class AnimationController:
                 self.image = self.sprites[state_down_left][self.current_frame_index // frame_count]
 
     def _select_image(self):
-        self._select_state_image()
+        if self.current_state == "idle":
+            self.select_state_image("idle")
+        elif self.current_state == "run":
+            self.select_state_image("run")
+        elif self.current_state == "attack":
+            self.select_state_image("attack")
         self._update_rectangle()
 
     def _update_rectangle(self):
