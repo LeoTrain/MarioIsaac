@@ -40,14 +40,14 @@ class Map:
                 y_start = obj.y
         return (x_start, y_start)
 
-    def get_enemies_starting_position(self):
-        enemies_starting_positions = []
+    def get_enemy_starting_position(self, enemy_name):
         x_start = 0
         y_start = 0
-        for layer in self.tmx_data.visible_layers:
-            if "Enemy" in layer.name:
-                for x, y, gid in layer:
-                    x_start = x
-                    y_start = y
-                    enemies_starting_positions.append((x_start, y_start))
-        return enemies_starting_positions
+        positions = []
+        for obj in self.tmx_data.objects:
+            print(obj)
+            if enemy_name in obj.name:
+                x_start = obj.x
+                y_start = obj.y
+                positions.append((x_start, y_start))
+        return positions

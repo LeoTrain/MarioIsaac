@@ -27,10 +27,9 @@ class CollisionHandler:
         for entity in self.enemies:
             for tile in self.collision_tiles:
                 if pygame.sprite.collide_mask(entity, tile):
-                    print("Collision between the entity and the tile")
+                    pass
 
             if pygame.sprite.collide_mask(entity, self.player):
-                print("Collision between the entity and the player")
                 self.player.take_damage(entity.attack_power)
 
             for other_entity in self.enemies:
