@@ -1,6 +1,7 @@
 import pygame
 
 from ..bll.base_character import BaseCharacter
+from ..bll.event_dick import event_dick
 
 
 class Player(BaseCharacter):
@@ -25,7 +26,6 @@ class Player(BaseCharacter):
             "attack": 8,
         }
         self.life_points = 20
-        self.DEAD = pygame.USEREVENT + 1
 
     def update_current_state(self):
         keys = pygame.key.get_pressed()
@@ -42,7 +42,7 @@ class Player(BaseCharacter):
     def take_damage(self, damage):
         self.life_points -= damage
         if self.life_points <= 0:
-            event = pygame.event.Event(self.DEAD)
+            event = pygame.event.Event(event_dick["player_dead"])
             pygame.event.post(event)
 
     def update(self):
