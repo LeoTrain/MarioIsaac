@@ -11,8 +11,9 @@ class Level(CollisionHandler):
     def __init__(self, surface):
         self.surface = surface
         self.game_map = Map("MarioIsaac/maps/level_one.tmx")
-        self._initialise_player()
         self.enemies = []
+        self._initialise_player()
+        self._initialise_enemies()
         super().__init__(self.player, self.game_map.get_collision_tiles(surface), self.enemies)
         self.all_sprites = pygame.sprite.Group()
         self.camera_offset_x = 0
@@ -26,6 +27,14 @@ class Level(CollisionHandler):
         print(starting_position)
         self.player.mask = pygame.mask.from_surface(self.player.image)
 
+    def _initialise_enemies(self):
+        sprite_sheet_path = "MarioIsaac/assets/sprites/orcs/goblin.png"
+        starting_positions = self.game_map.get_enemy_starting_position("goblin")
+        for i in range(len(starting_positions)):
+            goblin = Goblin(self.surface, sprite_sheet_path)
+            goblin.rect = goblin.image.get_rect(topleft=starting_positions[i])
+            self.enemies.append(goblin)
+
     def _update_camera(self):
         self.camera_offset_x = self.player.rect.centerx - self.surface.get_width() // 2
         self.camera_offset_y = self.player.rect.centery - self.surface.get_height() // 2
@@ -34,9 +43,13 @@ class Level(CollisionHandler):
         self.surface.fill((255, 255, 255))
         self.game_map.render(self.surface, self.camera_offset_x, self.camera_offset_y)
         self.player.draw(self.camera_offset_x, self.camera_offset_y)
+        for enemy in self.enemies:
+            enemy.draw(self.camera_offset_x, self.camera_offset_y)
 
     def update(self):
         self.player.update()
+        for enemy in self.enemies:
+            enemy.update((self.player.rect.x, self.player.rect.y))
         self.handle_collisions()
         self._update_camera()
         pygame.display.update()
