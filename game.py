@@ -75,8 +75,5 @@ class Game:
                 self.level.update()
                 self.level.render()
 
-            for enemy in self.level.enemies:
-                print(f"{enemy.life_points}")
-
             self.clock.tick(self.fps)
         pygame.quit()
