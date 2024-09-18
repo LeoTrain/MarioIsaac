@@ -2,11 +2,10 @@ import pygame
 
 from .levels.level import Level
 
-
 class Game:
-
     def __init__(self):
         pygame.init()
+        self.DEAD = pygame.USEREVENT +1
         self.display_width, self.display_height = 800, 600
         self.display = pygame.display.set_mode(
             (self.display_width, self.display_height)
@@ -27,13 +26,15 @@ class Game:
                 elif event.key == pygame.K_p:
                     self.level.player.color_mask = not self.level.player.color_mask
                 elif event.key == pygame.K_k:
-                    for goblin in self.level.goblins:
-                        goblin.draw_rect_border = not goblin.draw_rect_border
+                    for entity in self.level.enemies:
+                        entity.draw_rect_border = not entity.draw_rect_border
                 elif event.key == pygame.K_l:
-                    for goblin in self.level.goblins:
-                        goblin.color_mask = not goblin.color_mask
+                    for entity in self.level.enemies:
+                        entity.color_mask = not entity.color_mask
                 elif event.key == pygame.K_SPACE:
                     self.level.player.attack()
+                elif event.type == self.DEAD:
+                    self.running = False
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
@@ -59,7 +60,7 @@ class Game:
         while self.running:
             self.handle_events()
             self.level.update()
-            self.level.draw()
+            self.level.render()
 
             self.clock.tick(self.fps)
         pygame.quit()

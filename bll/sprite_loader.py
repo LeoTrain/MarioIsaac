@@ -22,7 +22,7 @@ class SpriteLoader:
             image = sprite_sheet.subsurface(
                 (i * sprite_width, y_start, sprite_width, sprite_height)
             )
-            image = pygame.transform.scale(image, (128, 128))
+            image = pygame.transform.scale(image, (64, 64))
             sprites.append(image)
         return sprites
 
