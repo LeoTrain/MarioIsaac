@@ -17,7 +17,7 @@ class Game:
 
         self.level = Level(self.display)
         self.main_menu = MainMenu(self.display)
-        
+
         self.main_menu_active = True
         self.level_active = False
 
@@ -39,7 +39,8 @@ class Game:
                 elif event.key == pygame.K_SPACE:
                     self.level.player.attack()
             elif event.type == self.DEAD:
-                self.running = False
+                self.level_active = False
+                self.main_menu_active = True
 
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
