@@ -1,6 +1,7 @@
 import pygame
 
 from .levels.level import Level
+from .main_menu import MainMenu
 
 class Game:
     def __init__(self):
@@ -15,6 +16,10 @@ class Game:
         self.fps = 60
 
         self.level = Level(self.display)
+        self.main_menu = MainMenu(self.display)
+        
+        self.main_menu_active = True
+        self.level_active = False
 
     def handle_events(self):
         for event in pygame.event.get():
@@ -58,9 +63,16 @@ class Game:
 
     def run(self):
         while self.running:
-            self.handle_events()
-            self.level.update()
-            self.level.render()
+            if self.main_menu_active and not self.level_active:
+                if not self.main_menu.handle_input():
+                    self.main_menu.render()
+                else:
+                    self.main_menu_active = False
+                    self.level_active = True
+            elif self.level_active and not self.main_menu_active:
+                self.handle_events()
+                self.level.update()
+                self.level.render()
 
             self.clock.tick(self.fps)
         pygame.quit()
