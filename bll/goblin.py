@@ -1,4 +1,5 @@
 import pygame
+import time
 
 from ..bll.base_character import BaseCharacter
 
@@ -27,6 +28,7 @@ class Goblin(BaseCharacter):
         self.life_points = 5
         self.attack_range = 100
         self.attack_power = 1
+        self.attack_start_time = time.time()
 
     def _is_in_attack_range(self, player_pos):
         in_range = False
@@ -55,8 +57,20 @@ class Goblin(BaseCharacter):
         self.move(x_direction, y_direction)
         self.current_state = "run"
 
+    def can_attack(self):
+        can_attack = False
+        time_passed = time.time() - self.attack_start_time 
+        if time_passed > 2:
+            can_attack = True
+        return can_attack
+
+    def attack(self, player):
+        print('hello')
+        super().attack()
+        self.attack_start_time = time.time()
+        player.take_damage(self.attack_power)
+
+
     def update(self, player_pos):
         self.move_to_player(player_pos)
-        if self._is_in_attack_range(player_pos):
-            self.attack()
         self.update_sprite()

@@ -30,7 +30,8 @@ class CollisionHandler:
                     pass
 
             if pygame.sprite.collide_mask(entity, self.player):
-                self.player.take_damage(entity.attack_power)
+                if entity.can_attack():
+                    entity.attack(self.player)
 
             for other_entity in self.enemies:
                 if other_entity is not entity:
