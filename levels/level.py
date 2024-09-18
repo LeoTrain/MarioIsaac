@@ -21,10 +21,10 @@ class Level(CollisionHandler):
         self.camera_offset_y = 0
 
     def _initialise_images(self):
-        heart_alive_image = pygame.image.load("MarioIsaac/assets/sprites/hearts/heart_red.png")
-        heart_dead_image = pygame.image.load("MarioIsaac/assets/sprites/hearts/heart_black.png")
-        self.heart_alive_image = pygame.transform.scale(heart_alive_image, (64, 64))
-        self.heart_dead_image = pygame.transform.scale(heart_dead_image, (64, 64))
+        heart_alive_image = pygame.image.load("MarioIsaac/assets/hearts/heart_red.png")
+        heart_dead_image = pygame.image.load("MarioIsaac/assets/hearts/heart_black.png")
+        self.heart_alive_image = pygame.transform.scale(heart_alive_image, (32, 32))
+        self.heart_dead_image = pygame.transform.scale(heart_dead_image, (32, 32))
 
     def _initialise_player(self):
         sprite_sheet_path = "MarioIsaac/assets/sprites/base_character/my_base_character_v2.png"
@@ -49,7 +49,7 @@ class Level(CollisionHandler):
     def _draw_hearts(self):
         for i in range(self.player.starting_life_points):
             x = self.surface.get_width() - self.heart_alive_image.get_width() - self.heart_alive_image.get_width() * i
-            pygame.surface.blit(self.heart_alive_image, (x, 100))
+            self.surface.blit(self.heart_alive_image, (x, 100))
 
     def render(self):
         self.surface.fill((255, 255, 255))
