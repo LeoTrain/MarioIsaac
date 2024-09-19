@@ -39,6 +39,9 @@ class Player(BaseCharacter):
         else:
             self.current_state = "idle"
 
+    def set_direction(self, direction):
+        self.last_pressed_direction = direction
+
     def attack(self, enemies):
         super().attack()
         attack_rect = self.rect.copy()
@@ -58,7 +61,6 @@ class Player(BaseCharacter):
         for enemy in enemies:
             if attack_rect.colliderect(enemy.rect):
                 enemy.take_damage(self.attack_power)
-
 
     def update(self):
         self.update_current_state()

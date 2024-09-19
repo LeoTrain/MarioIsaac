@@ -19,23 +19,34 @@ class Game:
         self.main_menu_active = True
 
     def handle_events(self):
+        self.handle_pygame_events()
+        self.handle_custom_events()
+        self.handle_player_movement()
+
+    def handle_pygame_events(self):
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 self.running = False
-            if event.type == pygame.KEYDOWN:
-                if event.key == pygame.K_o:
-                    self.level.player.draw_rect_border = not self.level.player.draw_rect_border
-                elif event.key == pygame.K_p:
-                    self.level.player.color_mask = not self.level.player.color_mask
-                elif event.key == pygame.K_k:
-                    for entity in self.level.enemies:
-                        entity.draw_rect_border = not entity.draw_rect_border
-                elif event.key == pygame.K_l:
-                    for entity in self.level.enemies:
-                        entity.color_mask = not entity.color_mask
-                elif event.key == pygame.K_SPACE:
-                    self.level.player.attack(self.level.enemies)
-            elif event.type == event_dick["player_dead"]:
+            elif event.type == pygame.KEYDOWN:
+                self.handle_keydown_events(event)
+
+    def handle_keydown_events(self, event):
+        if event.key == pygame.K_o:
+            self.level.player.draw_rect_border = not self.level.player.draw_rect_border
+        elif event.key == pygame.K_p:
+            self.level.player.color_mask = not self.level.player.color_mask
+        elif event.key == pygame.K_k:
+            for entity in self.level.enemies:
+                entity.draw_rect_border = not entity.draw_rect_border
+        elif event.key == pygame.K_l:
+            for entity in self.level.enemies:
+                entity.color_mask = not entity.color_mask
+        elif event.key == pygame.K_SPACE:
+            self.level.player.attack(self.level.enemies)
+
+    def handle_custom_events(self):
+        for event in pygame.event.get():
+            if event.type == event_dick["player_dead"]:
                 self.level_active = False
                 self.main_menu_active = True
             elif event.type == event_dick["enemy_dead"]:
@@ -43,25 +54,26 @@ class Game:
                     if enemy.life_points <= 0:
                         self.level.enemies.pop(i)
 
+    def handle_player_movement(self):
         keys = pygame.key.get_pressed()
         if keys[pygame.K_a]:
             self.level.player.move(-1, 0)
             self.level.player.current_x_direction = "left"
             self.level.player.current_y_direction = "down"
-            self.level.player.last_pressed_direction = "left"
+            self.level.player.set_direction("left")
         elif keys[pygame.K_d]:
             self.level.player.move(1, 0)
             self.level.player.current_x_direction = "right"
             self.level.player.current_y_direction = "down"
-            self.level.player.last_pressed_direction = "right"
+            self.level.player.set_direction("right")
         elif keys[pygame.K_w]:
             self.level.player.move(0, -1)
             self.level.player.current_y_direction = "up"
-            self.level.player.last_pressed_direction = "up"
+            self.level.player.set_direction("up")
         elif keys[pygame.K_s]:
             self.level.player.move(0, 1)
             self.level.player.current_y_direction = "down"
-            self.level.player.last_pressed_direction = "down"
+            self.level.player.set_direction("down")
 
     def run(self):
         while self.running:
