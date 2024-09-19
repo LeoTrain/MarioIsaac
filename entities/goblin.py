@@ -1,7 +1,6 @@
-import pygame
 import time
 
-from ..bll.base_character import BaseCharacter
+from ..entities.base_character import BaseCharacter
 
 
 class Goblin(BaseCharacter):

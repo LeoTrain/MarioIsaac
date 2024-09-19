@@ -1,7 +1,7 @@
 import pygame
 import pytmx
 
-from ..bll.tile import Tile
+from ..entities.tile import Tile
 
 
 class Map:
@@ -54,10 +54,11 @@ class Map:
         x_start = 0
         y_start = 0
         positions = []
+        scale_factor = self._calculate_scale_factor()
         for obj in self.tmx_data.objects:
             print(obj)
             if enemy_name in obj.name:
-                x_start = obj.x
-                y_start = obj.y
+                x_start = obj.x * scale_factor
+                y_start = obj.y * scale_factor
                 positions.append((x_start, y_start))
         return positions

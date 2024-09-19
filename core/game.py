@@ -1,8 +1,9 @@
 import pygame
 
-from .levels.level import Level
-from .main_menu import MainMenu
-from .bll.event_dick import event_dick
+from ..levels.level import Level
+from ..core.main_menu import MainMenu
+from ..logic.event_dick import event_dick
+
 
 class Game:
     def __init__(self):

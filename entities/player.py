@@ -1,7 +1,6 @@
 import pygame
 
-from ..bll.base_character import BaseCharacter
-from ..bll.event_dick import event_dick
+from ..entities.base_character import BaseCharacter
 
 
 class Player(BaseCharacter):

@@ -1,4 +1,4 @@
-from ..bll.tile import Tile
+from ..entities.tile import Tile
 
 
 class MovingTile(Tile):

@@ -1,10 +1,9 @@
 import pygame
 
-from ..bll.tile import Tile
-from ..bll.player import Player
-from ..bll.goblin import Goblin
+from ..entities.player import Player
+from ..entities.goblin import Goblin
 from ..levels.map import Map
-from ..bll.collision_handler import CollisionHandler
+from ..logic.collision_handler import CollisionHandler
 
 
 class Level(CollisionHandler):
@@ -21,8 +20,8 @@ class Level(CollisionHandler):
         self.camera_offset_y = self.player.rect.topleft[1]
 
     def _initialise_images(self):
-        heart_alive_image = pygame.image.load("MarioIsaac/assets/hearts/heart_red.png")
-        heart_dead_image = pygame.image.load("MarioIsaac/assets/hearts/heart_black.png")
+        heart_alive_image = pygame.image.load("MarioIsaac/assets/tileset/hearts/heart_red.png")
+        heart_dead_image = pygame.image.load("MarioIsaac/assets/tileset/hearts/heart_black.png")
         self.heart_alive_image = pygame.transform.scale(heart_alive_image, (32, 32))
         self.heart_dead_image = pygame.transform.scale(heart_dead_image, (32, 32))
 
