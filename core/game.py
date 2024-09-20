@@ -21,17 +21,15 @@ class Game:
         self.main_menu_active = True
         self.death_screen = DeathScreen(self.display)
 
-    def handle_events(self):
-        self.handle_custom_events()
-        self.handle_pygame_events()
-        self.handle_player_movement()
+    def handle_event(self, event):
+        self.handle_custom_events(event)
+        self.handle_pygame_events(event)
 
-    def handle_pygame_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
-            elif event.type == pygame.KEYDOWN:
-                self.handle_keydown_events(event)
+    def handle_pygame_events(self, event):
+        if event.type == pygame.QUIT:
+            self.running = False
+        elif event.type == pygame.KEYDOWN:
+            self.handle_keydown_events(event)
 
     def handle_keydown_events(self, event):
         if event.key == pygame.K_o:
@@ -47,29 +45,28 @@ class Game:
         elif event.key == pygame.K_SPACE:
             self.level.player.attack(self.level.enemies)
 
-    def handle_custom_events(self):
-        for event in pygame.event.get():
-            if event.type == event_dick["player_dead"]:
-                death_screen_on = True
-                while death_screen_on:
-                    inputs_output = self.death_screen.handle_input()
-                    if inputs_output:
-                        if inputs_output == "start_game":
-                            self.level.reset_level()
-                            self.level_active = True
-                            self.main_menu_active = False
-                            death_screen_on = False
-                        elif inputs_output == "main_menu":
-                            self.level_active = False
-                            self.main_menu_active = True
-                            death_screen_on = False
-                    else:
-                        self.level.render()
-                        self.death_screen.render()
-            elif event.type == event_dick["enemy_dead"]:
-                for i, enemy in enumerate(self.level.enemies):
-                    if enemy.life_points <= 0:
-                        self.level.enemies.pop(i)
+    def handle_custom_events(self, event):
+        if event.type == event_dick["player_dead"]:
+            death_screen_on = True
+            while death_screen_on:
+                inputs_output = self.death_screen.handle_input()
+                if inputs_output:
+                    if inputs_output == "start_game":
+                        self.level.reset_level()
+                        self.level_active = True
+                        self.main_menu_active = False
+                        death_screen_on = False
+                    elif inputs_output == "main_menu":
+                        self.level_active = False
+                        self.main_menu_active = True
+                        death_screen_on = False
+                else:
+                    self.level.render()
+                    self.death_screen.render()
+        elif event.type == event_dick["enemy_dead"]:
+            for i, enemy in enumerate(self.level.enemies):
+                if enemy.life_points <= 0:
+                    self.level.enemies.pop(i)
 
     def handle_player_movement(self):
         keys = pygame.key.get_pressed()
@@ -102,7 +99,9 @@ class Game:
                     self.level_active = True
                     self.level.reset_level()
             elif self.level_active and not self.main_menu_active:
-                self.handle_events()
+                for event in pygame.event.get():
+                    self.handle_event(event)
+                self.handle_player_movement()
                 self.level.update()
                 self.level.render()
 
