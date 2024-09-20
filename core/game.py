@@ -64,6 +64,7 @@ class Game:
                             self.main_menu_active = True
                             death_screen_on = False
                     else:
+                        self.level.render()
                         self.death_screen.render()
             elif event.type == event_dick["enemy_dead"]:
                 for i, enemy in enumerate(self.level.enemies):
