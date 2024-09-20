@@ -4,6 +4,7 @@ from ..entities.player import Player
 from ..entities.goblin import Goblin
 from ..levels.map import Map
 from ..logic.collision_handler import CollisionHandler
+from ..logic.event_dick import event_dick
 from ..core.loading_screen import LoadingScreen
 
 
@@ -61,7 +62,7 @@ class Level(CollisionHandler):
         self._initialise_player()
         self.loading_screen.increment_step()
         self.loading_screen.update()
-        
+
         self._initialise_player()
         self.wait()
         self._initialise_player()
@@ -90,10 +91,16 @@ class Level(CollisionHandler):
             enemy.draw(self.camera_offset_x, self.camera_offset_y)
         self._draw_hearts()
 
+    def did_player_win(self):
+        if len(self.enemies) == 0:
+            event = pygame.event.Event(event_dick["player_won"])
+            pygame.event.post(event)
+
     def update(self):
         self.player.update()
         for enemy in self.enemies:
             enemy.update((self.player.rect.x, self.player.rect.y))
         self.handle_collisions()
+        self.did_player_win()
         self._update_camera()
         pygame.display.update()

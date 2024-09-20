@@ -4,6 +4,7 @@ import sys
 from ..levels.level import Level
 from ..core.main_menu import MainMenu
 from ..core.death_screen import DeathScreen
+from ..core.winner_screen import WinnerScreen
 from ..logic.event_dick import event_dick
 
 
@@ -20,6 +21,7 @@ class Game:
         self.main_menu = MainMenu(self.display, "MarioIsaac/assets/tileset/menu_bg.jpg")
         self.main_menu_active = True
         self.death_screen = DeathScreen(self.display)
+        self.winner_screen = WinnerScreen(self.display)
 
     def handle_event(self, event):
         self.handle_custom_events(event)
@@ -69,6 +71,15 @@ class Game:
             for i, enemy in enumerate(self.level.enemies):
                 if enemy.life_points <= 0:
                     self.level.enemies.pop(i)
+        elif event.type == event_dick["player_won"]:
+            winner_screen_on = True
+            while winner_screen_on:
+                state = self.winner_screen.handle_input()
+                if state:
+                    winner_screen_on = self.handle_death_state(state)
+                else:
+                    self.level.render()
+                    self.winner_screen.render()
 
     def handle_player_movement(self):
         keys = pygame.key.get_pressed()

@@ -1,11 +1,12 @@
 import pygame
 import sys
 
-class DeathScreen:
+
+class WinnerScreen:
     def __init__(self, surface):
         self.surface = surface
         self.font = pygame.font.Font(None, 50)
-        self.options = ["Restart Game", "Return To Menu", "Quit"]
+        self.options = ["Next level", "Return To Menu", "Quit"]
         self.selected_index = 0
         self._initiate_rectangles()
 
@@ -42,7 +43,7 @@ class DeathScreen:
             self.surface.blit(text, option["rect"])
 
         title_font = pygame.font.Font(None, 80)
-        title_text = title_font.render("You Died!", True, (255, 140, 0))
+        title_text = title_font.render("You Won!", True, (255, 140, 0))
         title_rect = title_text.get_rect(center=(self.surface.get_width() // 2, self.surface.get_height() // 4))
         self.surface.blit(title_text, title_rect)
 
@@ -67,4 +68,3 @@ class DeathScreen:
                         pygame.quit()
                         sys.exit()
         return None
-
