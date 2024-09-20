@@ -17,7 +17,7 @@ class Game:
         self.fps = 60
         self.level = Level(self.display)
         self.level_active = False
-        self.main_menu = MainMenu(self.display)
+        self.main_menu = MainMenu(self.display, "MarioIsaac/assets/tileset/menu_bg.jpg")
         self.main_menu_active = True
         self.death_screen = DeathScreen(self.display)
 
