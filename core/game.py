@@ -1,7 +1,9 @@
 import pygame
+import sys
 
 from ..levels.level import Level
 from ..core.main_menu import MainMenu
+from ..core.death_screen import DeathScreen
 from ..logic.event_dick import event_dick
 
 
@@ -17,10 +19,11 @@ class Game:
         self.level_active = False
         self.main_menu = MainMenu(self.display)
         self.main_menu_active = True
+        self.death_screen = DeathScreen(self.display)
 
     def handle_events(self):
-        self.handle_pygame_events()
         self.handle_custom_events()
+        self.handle_pygame_events()
         self.handle_player_movement()
 
     def handle_pygame_events(self):
@@ -47,8 +50,9 @@ class Game:
     def handle_custom_events(self):
         for event in pygame.event.get():
             if event.type == event_dick["player_dead"]:
-                self.level_active = False
-                self.main_menu_active = True
+                while True:
+                    self.death_screen.handle_input()
+                    self.death_screen.render()
             elif event.type == event_dick["enemy_dead"]:
                 for i, enemy in enumerate(self.level.enemies):
                     if enemy.life_points <= 0:
