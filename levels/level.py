@@ -4,6 +4,7 @@ from ..entities.player import Player
 from ..entities.goblin import Goblin
 from ..levels.map import Map
 from ..logic.collision_handler import CollisionHandler
+from ..core.loading_screen import LoadingScreen
 
 
 class Level(CollisionHandler):
@@ -41,9 +42,30 @@ class Level(CollisionHandler):
             goblin.rect = goblin.image.get_rect(topleft=starting_positions[i])
             self.enemies.append(goblin)
 
+    def wait(self):
+        pygame.time.wait(1000)
+
     def reset_level(self):
+        font = pygame.font.Font(None, 36)
+        self.loading_screen = LoadingScreen(self.surface, font, total_steps=5)
+        self.loading_screen.update()
+
+        self._initialise_images()
+        self.loading_screen.increment_step()
+        self.loading_screen.update()
+
         self._initialise_enemies()
+        self.loading_screen.increment_step()
+        self.loading_screen.update()
+
         self._initialise_player()
+        self.loading_screen.increment_step()
+        self.loading_screen.update()
+        
+        self._initialise_player()
+        self.wait()
+        self._initialise_player()
+        self.wait()
 
     def _update_camera(self):
         self.camera_offset_x = self.player.rect.centerx - self.surface.get_width() // 2
