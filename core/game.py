@@ -45,21 +45,23 @@ class Game:
         elif event.key == pygame.K_SPACE:
             self.level.player.attack(self.level.enemies)
 
+    def handle_death_state(self, state):
+        if state == "start_game":
+            self.level.reset_level()
+            self.level_active = True
+            self.main_menu_active = False
+        elif state == "main_menu":
+            self.level_active = False
+            self.main_menu_active = True
+        return False
+
     def handle_custom_events(self, event):
         if event.type == event_dick["player_dead"]:
             death_screen_on = True
             while death_screen_on:
-                inputs_output = self.death_screen.handle_input()
-                if inputs_output:
-                    if inputs_output == "start_game":
-                        self.level.reset_level()
-                        self.level_active = True
-                        self.main_menu_active = False
-                        death_screen_on = False
-                    elif inputs_output == "main_menu":
-                        self.level_active = False
-                        self.main_menu_active = True
-                        death_screen_on = False
+                state = self.death_screen.handle_input()
+                if state:
+                    death_screen_on = self.handle_death_state(state)
                 else:
                     self.level.render()
                     self.death_screen.render()
