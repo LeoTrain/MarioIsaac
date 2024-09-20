@@ -55,6 +55,7 @@ class Game:
                     inputs_output = self.death_screen.handle_input()
                     if inputs_output:
                         if inputs_output == "start_game":
+                            self.level.reset_level()
                             self.level_active = True
                             self.main_menu_active = False
                             death_screen_on = False
@@ -98,6 +99,7 @@ class Game:
                 else:
                     self.main_menu_active = False
                     self.level_active = True
+                    self.level.reset_level()
             elif self.level_active and not self.main_menu_active:
                 self.handle_events()
                 self.level.update()

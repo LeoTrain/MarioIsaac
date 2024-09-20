@@ -10,7 +10,6 @@ class Level(CollisionHandler):
     def __init__(self, surface):
         self.surface = surface
         self.game_map = Map("MarioIsaac/maps/level_one.tmx")
-        self.enemies = []
         self._initialise_player()
         self._initialise_enemies()
         self._initialise_images()
@@ -36,10 +35,15 @@ class Level(CollisionHandler):
     def _initialise_enemies(self):
         sprite_sheet_path = "MarioIsaac/assets/sprites/orcs/goblin.png"
         starting_positions = self.game_map.get_enemy_starting_position("goblin")
+        self.enemies = []
         for i in range(len(starting_positions)):
             goblin = Goblin(self.surface, sprite_sheet_path)
             goblin.rect = goblin.image.get_rect(topleft=starting_positions[i])
             self.enemies.append(goblin)
+
+    def reset_level(self):
+        self._initialise_enemies()
+        self._initialise_player()
 
     def _update_camera(self):
         self.camera_offset_x = self.player.rect.centerx - self.surface.get_width() // 2
