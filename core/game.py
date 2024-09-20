@@ -50,9 +50,20 @@ class Game:
     def handle_custom_events(self):
         for event in pygame.event.get():
             if event.type == event_dick["player_dead"]:
-                while True:
-                    self.death_screen.handle_input()
-                    self.death_screen.render()
+                death_screen_on = True
+                while death_screen_on:
+                    inputs_output = self.death_screen.handle_input()
+                    if inputs_output:
+                        if inputs_output == "start_game":
+                            self.level_active = True
+                            self.main_menu_active = False
+                            death_screen_on = False
+                        elif inputs_output == "main_menu":
+                            self.level_active = False
+                            self.main_menu_active = True
+                            death_screen_on = False
+                    else:
+                        self.death_screen.render()
             elif event.type == event_dick["enemy_dead"]:
                 for i, enemy in enumerate(self.level.enemies):
                     if enemy.life_points <= 0:
