@@ -10,9 +10,9 @@ class Player(BaseCharacter):
             "attack": [8, 8, 8, 8],
         }
         self.frame_counts = {
-            "idle": [48, 16, 48, 48],
-            "run": [32, 32, 32, 32],
-            "attack": [32, 32, 32, 32],
+            "idle": [12, 4, 12, 12],
+            "run": [8, 8, 8, 8],
+            "attack": [8, 8, 8, 8],
         }
         self.sprite_widths = {
             "idle": [64, 64, 64, 64],

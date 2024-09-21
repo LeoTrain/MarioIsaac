@@ -16,9 +16,9 @@ class AnimationController:
     def get_current_direction_index(self, direction):
         directions = {
             "down": 0,
-            "up": 0,
-            "left": 0,
-            "right": 0
+            "up": 1,
+            "left": 2,
+            "right": 3
         }
         return directions[direction]
 
@@ -38,9 +38,7 @@ class AnimationController:
 
     def _update_rectangle(self):
         old_center = self.entity.rect.center
-        width, length = self.entity.mask.get_size()
-        new_rectangle = pygame.rect.Rect(width, length, 0, 0)
-        self.entity.rect = new_rectangle
+        self.entity.rect = self.entity.image.get_rect()
         self.entity.rect.center = old_center
 
     def update_sprite(self):
