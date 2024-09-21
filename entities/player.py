@@ -1,6 +1,7 @@
 import pygame
 from ..entities.base_character import BaseCharacter
 
+
 class Player(BaseCharacter):
     def __init__(self, display, sprite_sheet_path):
         self.number_of_frames = {

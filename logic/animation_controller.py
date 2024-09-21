@@ -16,9 +16,9 @@ class AnimationController:
     def get_current_direction_index(self, direction):
         directions = {
             "down": 0,
-            "up": 1,
-            "left": 2,
-            "right": 3
+            "up": 0,
+            "left": 0,
+            "right": 0
         }
         return directions[direction]
 
@@ -30,8 +30,7 @@ class AnimationController:
 
     def select_state_image(self):
         frame_count = self.entity.frame_counts[self.entity.current_state][0]
-        last_direction = self.entity.last_pressed_direction if self.entity.last_pressed_direction is not None else "down"
-        state_key = f"{self.entity.current_state}_{last_direction}"
+        state_key = f"{self.entity.current_state}_{self.entity.last_pressed_direction}"
         self.entity.image = self.sprites[state_key][self.current_frame_index // frame_count]
 
     def _update_mask(self):

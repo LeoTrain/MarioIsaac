@@ -87,13 +87,11 @@ class Game:
         if keys[pygame.K_a]:
             self.level.player.move(-1, 0)
             self.level.player.current_x_direction = "left"
-            self.level.player.current_y_direction = "down"
             self.level.player.set_direction("left")
             self.level.player.current_state = "run"
         elif keys[pygame.K_d]:
             self.level.player.move(1, 0)
             self.level.player.current_x_direction = "right"
-            self.level.player.current_y_direction = "down"
             self.level.player.set_direction("right")
             self.level.player.current_state = "run"
         elif keys[pygame.K_w]:
