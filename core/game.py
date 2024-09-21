@@ -45,6 +45,7 @@ class Game:
             for entity in self.level.enemies:
                 entity.color_mask = not entity.color_mask
         elif event.key == pygame.K_SPACE:
+            self.level.player.current_state = "attack"
             self.level.player.attack(self.level.enemies)
 
     def handle_death_state(self, state):
@@ -88,19 +89,25 @@ class Game:
             self.level.player.current_x_direction = "left"
             self.level.player.current_y_direction = "down"
             self.level.player.set_direction("left")
+            self.level.player.current_state = "run"
         elif keys[pygame.K_d]:
             self.level.player.move(1, 0)
             self.level.player.current_x_direction = "right"
             self.level.player.current_y_direction = "down"
             self.level.player.set_direction("right")
+            self.level.player.current_state = "run"
         elif keys[pygame.K_w]:
             self.level.player.move(0, -1)
             self.level.player.current_y_direction = "up"
             self.level.player.set_direction("up")
+            self.level.player.current_state = "run"
         elif keys[pygame.K_s]:
             self.level.player.move(0, 1)
             self.level.player.current_y_direction = "down"
             self.level.player.set_direction("down")
+            self.level.player.current_state = "run"
+        else:
+            self.level.player.current_state = "idle"
 
     def run(self):
         while self.running:

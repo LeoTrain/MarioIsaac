@@ -10,7 +10,7 @@ class BaseCharacter(MovingTile, SpriteLoader, AnimationController):
     def __init__(self, display, sprite_sheet_path):
         super().__init__(display)
         SpriteLoader.__init__(self, sprite_sheet_path)
-        AnimationController.__init__(self)
+        AnimationController.__init__(self, self)
 
         self.life_points = 0
         self.attack_power = 0

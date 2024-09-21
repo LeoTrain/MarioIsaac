@@ -3,75 +3,60 @@ import pygame
 
 class SpriteLoader:
     def __init__(self, sprite_sheet_path):
-        self.sprite_sheet_path = sprite_sheet_path
-        self.current_frame_index = 0
-        self.frame_counts = {
-            "idle": 0,
-            "run": 0,
-            "attack": 0,
-        }
-        self.sprite_frames = {
-            "idle": 0,
-            "run": 0,
-            "attack": 0,
-        }
+        self.sprite_sheet = pygame.image.load(sprite_sheet_path)
 
-    def _load_sprites(self, sprite_sheet, y_start, num_of_frames, sprite_width, sprite_height):
+    def _load_sprites(self, y_start, num_of_frames, sprite_width, sprite_height):
         sprites = []
         for i in range(num_of_frames):
-            image = sprite_sheet.subsurface(
+            image = self.sprite_sheet.subsurface(
                 (i * sprite_width, y_start, sprite_width, sprite_height)
             )
             image = pygame.transform.scale(image, (128, 128))
             sprites.append(image)
         return sprites
 
-    def _flip_sprites(self, sprite):
-        return [pygame.transform.flip(frame, True, False) for frame in sprite]
+    def load_sprites_by_direction(self, current_y, number_of_frames, widths, heights, action):
+        sprites = {}
 
-    def load_character_sprites(self, widths, heights, number_of_frames):
-        sprite_sheet = pygame.image.load(self.sprite_sheet_path).convert_alpha()
+        down_height = heights[0]
+        sprites[f'{action}_down'] = self._load_sprites(current_y, number_of_frames[0], widths[0], down_height)
+        current_y += down_height
+
+        up_height = heights[1]
+        sprites[f'{action}_up'] = self._load_sprites(current_y, number_of_frames[1], widths[1], up_height)
+        current_y += up_height
+
+        left_height = heights[2]
+        sprites[f'{action}_left'] = self._load_sprites(current_y, number_of_frames[2], widths[2], left_height)
+        current_y += left_height
+
+        right_height = heights[3]
+        sprites[f'{action}_right'] = self._load_sprites(current_y, number_of_frames[3], widths[3], right_height)
+        current_y += right_height
+
+        return sprites, current_y
+
+    def load_idle_sprites(self, current_y, number_of_frames, widths, heights):
+        return self.load_sprites_by_direction(current_y, number_of_frames, widths, heights, action='idle')
+
+    def load_run_sprites(self, current_y, number_of_frames, widths, heights):
+        return self.load_sprites_by_direction(current_y, number_of_frames, widths, heights, action='run')
+
+    def load_attack_sprites(self, current_y, number_of_frames, widths, heights):
+        return self.load_sprites_by_direction(current_y, number_of_frames, widths, heights, action='attack')
+
+    def load_character_sprites(self, number_of_frames, widths, heights):
         current_y = 0
 
-        # Idle
-        idle_height = heights[0]
-        idle_down_right = self._load_sprites(sprite_sheet, current_y, number_of_frames[0], widths[0], idle_height)
-        idle_down_left = self._flip_sprites(idle_down_right)
-        current_y += idle_height
+        idle_sprites, current_y = self.load_idle_sprites(current_y, number_of_frames["idle"], widths["idle"], heights["idle"])
+        run_sprites, current_y = self.load_run_sprites(current_y, number_of_frames["run"], widths["run"], heights["run"])
+        attack_sprites, current_y = self.load_attack_sprites(current_y, number_of_frames["attack"], widths["attack"], heights["attack"])
 
-        idle_up_height = heights[1]
-        idle_up = self._load_sprites(sprite_sheet, current_y, number_of_frames[1], widths[1], idle_up_height)
-        current_y += idle_up_height
-
-        # Run
-        run_height = heights[2]
-        run_down_right = self._load_sprites(sprite_sheet, current_y, number_of_frames[2], widths[2], run_height)
-        run_down_left = self._flip_sprites(run_down_right)
-        current_y += run_height
-
-        run_up_height = heights[3]
-        run_up = self._load_sprites(sprite_sheet, current_y, number_of_frames[3], widths[3], run_up_height)
-        current_y += run_up_height
-
-        # Attack
-        attack_height = heights[4]
-        attack_down_right = self._load_sprites(sprite_sheet, current_y, number_of_frames[4], widths[4], attack_height)
-        attack_down_left = self._flip_sprites(attack_down_right)
-        current_y += attack_height
-
-        attack_up_height = heights[5]
-        attack_up = self._load_sprites(sprite_sheet, current_y, number_of_frames[5], widths[5], attack_up_height)
-        current_y += attack_up_height
-
-        player_sprites = {
-            "idle_down_right": idle_down_right,
-            "idle_down_left": idle_down_left,
-            "idle_up": idle_up,
-            "run_down_right": run_down_right,
-            "run_down_left": run_down_left,
-            "run_up": run_up,
-            "attack_down_right": attack_down_right,
-            "attack_down_left": attack_down_left,
-            "attack_up": attack_up,
+        character_sprites = {
+            **idle_sprites,
+            **run_sprites,
+            **attack_sprites
         }
-        return player_sprites
+
+        return character_sprites
+

@@ -27,7 +27,7 @@ class Level(CollisionHandler):
         self.heart_dead_image = pygame.transform.scale(heart_dead_image, (32, 32))
 
     def _initialise_player(self):
-        sprite_sheet_path = "MarioIsaac/assets/sprites/base_character/my_base_character_v2.png"
+        sprite_sheet_path = "MarioIsaac/assets/sprites/base_character/my_base_character_v3.png"
         self.player = Player(self.surface, sprite_sheet_path)
         starting_position = self.game_map.get_player_starting_position()
         self.player.rect.topleft = starting_position[0], starting_position[1]
@@ -35,7 +35,7 @@ class Level(CollisionHandler):
         self.player.mask = pygame.mask.from_surface(self.player.image)
 
     def _initialise_enemies(self):
-        sprite_sheet_path = "MarioIsaac/assets/sprites/orcs/goblin.png"
+        sprite_sheet_path = "MarioIsaac/assets/sprites/orcs/my_goblin_v1.png"
         starting_positions = self.game_map.get_enemy_starting_position("goblin")
         self.enemies = []
         for i in range(len(starting_positions)):
