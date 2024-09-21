@@ -38,11 +38,13 @@ class AnimationController:
 
     def _update_rectangle(self):
         old_center = self.entity.rect.center
-        self.entity.rect = self.entity.image.get_rect()
+        width, length = self.entity.mask.get_size()
+        new_rectangle = pygame.rect.Rect(width, length, 0, 0)
+        self.entity.rect = new_rectangle
         self.entity.rect.center = old_center
 
     def update_sprite(self):
         self.increment_frame()
         self.select_state_image()
-        self._update_rectangle()
         self._update_mask()
+        self._update_rectangle()
