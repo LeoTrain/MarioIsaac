@@ -5,7 +5,7 @@ class MovingTile(Tile):
     def __init__(self, display):
         super().__init__(display)
         self.speed = 0
-        self.last_pressed_direction = None
+        self.last_pressed_direction = "down"
 
     def move(self, dx, dy):
         self.update_old_rect()

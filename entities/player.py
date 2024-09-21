@@ -1,14 +1,17 @@
 import pygame
-
 from ..entities.base_character import BaseCharacter
-
 
 class Player(BaseCharacter):
     def __init__(self, display, sprite_sheet_path):
         self.number_of_frames = {
-            "idle": [12, 12, 12, 4],
+            "idle": [12, 4, 12, 12],
             "run": [8, 8, 8, 8],
             "attack": [8, 8, 8, 8],
+        }
+        self.frame_counts = {
+            "idle": [48, 16, 48, 48],
+            "run": [32, 32, 32, 32],
+            "attack": [32, 32, 32, 32],
         }
         self.sprite_widths = {
             "idle": [64, 64, 64, 64],
@@ -21,7 +24,6 @@ class Player(BaseCharacter):
             "attack": [64, 64, 64, 64],
         }
         super().__init__(display, sprite_sheet_path)
-
         self.image = self.sprites["idle_down"][0]
         self.speed = 5
         self.attack_counter = 0
@@ -52,4 +54,4 @@ class Player(BaseCharacter):
                 enemy.take_damage(self.attack_power)
 
     def update(self):
-        self.update_sprite()
+        self.animation_controller.update_sprite()

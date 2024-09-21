@@ -6,15 +6,20 @@ from ..logic.animation_controller import AnimationController
 from ..logic.event_dick import event_dick
 
 
-class BaseCharacter(MovingTile, SpriteLoader, AnimationController):
+class BaseCharacter(MovingTile):
     def __init__(self, display, sprite_sheet_path):
         super().__init__(display)
-        SpriteLoader.__init__(self, sprite_sheet_path)
-        AnimationController.__init__(self, self)
+        self.sprite_loader = SpriteLoader(sprite_sheet_path)
+        self.animation_controller = AnimationController(self.sprite_loader, self)
+        self.sprites = self.sprite_loader.load_character_sprites(self.number_of_frames, self.sprite_widths, self.sprite_heights)
 
         self.life_points = 0
         self.attack_power = 0
         self.attack_range = 0
+
+        self.current_state = "idle"
+        self.current_x_direction = "right"
+        self.current_y_direction = "down"
 
     def attack(self):
         self.current_state = "attack"

@@ -1,7 +1,5 @@
 import time
-
 from ..entities.enemy import Enemy
-
 
 class Goblin(Enemy):
     def __init__(self, display, sprite_sheet_path):
@@ -9,6 +7,11 @@ class Goblin(Enemy):
             "idle": [4, 4, 4, 4],
             "run": [8, 8, 8, 8],
             "attack": [8, 8, 8, 8],
+        }
+        self.frame_counts = {
+            "idle": [40, 40, 40, 40],
+            "run": [80, 80, 80, 80],
+            "attack": [80, 80, 80],
         }
         self.sprite_widths = {
             "idle": [64, 64, 64, 64],
@@ -21,6 +24,7 @@ class Goblin(Enemy):
             "attack": [64, 64, 64, 64],
         }
         super().__init__(display, sprite_sheet_path)
+
         self.image = self.sprites["idle_down"][0]
         self.current_frame_index = 0
         self.speed = 1
@@ -28,3 +32,4 @@ class Goblin(Enemy):
         self.attack_range = 100
         self.attack_power = 1
         self.attack_start_time = time.time()
+

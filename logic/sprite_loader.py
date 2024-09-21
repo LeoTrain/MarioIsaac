@@ -59,4 +59,3 @@ class SpriteLoader:
         }
 
         return character_sprites
-

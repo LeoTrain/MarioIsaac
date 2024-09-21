@@ -2,44 +2,48 @@ import pygame
 
 
 class AnimationController:
-    def __init__(self, sprite_loader):
-        self.current_state = "idle"
-        self.current_x_direction = "right"
-        self.current_y_direction = "down"
-        self.current_frame_index = 0
-        self.frame_counts = sprite_loader.frame_counts
-        self.sprite_frames = sprite_loader.number_of_frames
-        self.sprites = sprite_loader.load_character_sprites(
-            sprite_loader.frame_counts,
-            sprite_loader.sprite_widths,
-            sprite_loader.sprite_heights
-        )
-        self.image = self.sprites["idle_down"][0]
-        self.rect = self.image.get_rect()
+    def __init__(self, sprite_loader, entity):
 
-    def _increment_frame(self):
-        self.current_frame_index += 1
-        total_frames = self.frame_counts[self.current_state] * self.sprite_frames[self.current_state] - 1
-        if self.current_frame_index > total_frames:
-            self.current_frame_index = 0
+        self.current_frame_index = 0
+        self.sprite_frames = entity.number_of_frames
+        self.sprites = sprite_loader.load_character_sprites(
+            entity.number_of_frames,
+            entity.sprite_widths,
+            entity.sprite_heights
+        )
+        self.entity = entity
+
+    def get_current_direction_index(self, direction):
+        directions = {
+            "down": 0,
+            "up": 1,
+            "left": 2,
+            "right": 3
+        }
+        return directions[direction]
+
+    def increment_frame(self):
+        current_state = self.entity.current_state
+        current_direction_index = self.get_current_direction_index(self.entity.last_pressed_direction)
+        total_frames = self.entity.frame_counts[current_state][current_direction_index] * self.sprite_frames[current_state][current_direction_index]
+        self.current_frame_index = (self.current_frame_index + 1) % total_frames
 
     def select_state_image(self):
-        frame_count = self.frame_counts[self.current_state]
-        last_direction = self.last_pressed_direction if self.last_pressed_direction is not None else "down"
-        print(self.current_state, last_direction)
-        state_key = f"{self.current_state}_{last_direction}"
-        self.image = self.sprites[state_key][self.current_frame_index // frame_count]
+        frame_count = self.entity.frame_counts[self.entity.current_state][0]
+        last_direction = self.entity.last_pressed_direction if self.entity.last_pressed_direction is not None else "down"
+        state_key = f"{self.entity.current_state}_{last_direction}"
+        self.entity.image = self.sprites[state_key][self.current_frame_index // frame_count]
 
     def _update_mask(self):
-        self.mask = pygame.mask.from_surface(self.image)
+        self.entity.mask = pygame.mask.from_surface(self.entity.image)
 
     def _update_rectangle(self):
-        old_center = self.rect.center
-        self.rect = self.image.get_rect()
-        self.rect.center = old_center
+        old_center = self.entity.rect.center
+        self.entity.rect = self.entity.image.get_rect()
+        self.entity.rect.center = old_center
 
     def update_sprite(self):
-        self._increment_frame()
+        self.increment_frame()
         self.select_state_image()
         self._update_rectangle()
         self._update_mask()
