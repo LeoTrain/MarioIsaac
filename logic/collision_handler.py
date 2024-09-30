@@ -1,8 +1,5 @@
 import pygame
 
-
-import pygame
-
 class CollisionHandler:
     def __init__(self, player, collision_tiles, enemies, collision_cooldown=500):
         self.player = player
