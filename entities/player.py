@@ -30,6 +30,7 @@ class Player(BaseCharacter):
         self.attack_counter = 0
         self.life_points = self.starting_life_points = 5
         self.attack_power = 3
+        self.in_attack = False
 
     def set_direction(self, direction):
         self.last_pressed_direction = direction

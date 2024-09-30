@@ -1,10 +1,11 @@
-import pygame
 import sys
 
-from ..levels.level import Level
-from ..core.main_menu import MainMenu
+import pygame
+
 from ..core.death_screen import DeathScreen
+from ..core.main_menu import MainMenu
 from ..core.winner_screen import WinnerScreen
+from ..levels.level import Level
 from ..logic.event_dick import event_dick
 
 
@@ -12,7 +13,9 @@ class Game:
     def __init__(self):
         pygame.init()
         self.display_width, self.display_height = 800, 600
-        self.display = pygame.display.set_mode((self.display_width, self.display_height))
+        self.display = pygame.display.set_mode(
+            (self.display_width, self.display_height)
+        )
         self.running = True
         self.clock = pygame.time.Clock()
         self.fps = 60
@@ -45,7 +48,7 @@ class Game:
             for entity in self.level.enemies:
                 entity.color_mask = not entity.color_mask
         elif event.key == pygame.K_SPACE:
-            self.level.player.current_state = "attack"
+            self.level.player.in_attack = True
             self.level.player.attack(self.level.enemies)
 
     def handle_death_state(self, state):
@@ -105,7 +108,15 @@ class Game:
             self.level.player.set_direction("down")
             self.level.player.current_state = "run"
         else:
-            self.level.player.current_state = "idle"
+            if self.level.player.in_attack:
+                if self.level.player.attack_counter < 25:
+                    self.level.player.attack_counter += 1
+                    self.level.player.current_state = "attack"
+                else:
+                    self.level.player.attack_counter = 0
+                    self.level.player.in_attack = False
+            else:
+                self.level.player.current_state = "idle"
 
     def run(self):
         while self.running:
@@ -122,6 +133,7 @@ class Game:
                 self.handle_player_movement()
                 self.level.update()
                 self.level.render()
+                # print(self.level.player.attack_counter)
 
             self.clock.tick(self.fps)
         pygame.quit()
