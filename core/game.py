@@ -133,7 +133,7 @@ class Game:
                 self.handle_player_movement()
                 self.level.update()
                 self.level.render()
-                # print(self.level.player.attack_counter)
+                print(self.level.player.xp.now_xp, self.level.player.xp.now_level)
 
             self.clock.tick(self.fps)
         pygame.quit()

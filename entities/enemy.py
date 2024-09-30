@@ -1,5 +1,7 @@
 import time
+
 from ..entities.base_character import BaseCharacter
+
 
 class Enemy(BaseCharacter):
     def __init__(self, display, sprite_sheet):
@@ -7,7 +9,10 @@ class Enemy(BaseCharacter):
 
     def _is_in_attack_range(self, player_pos):
         in_range = False
-        if abs(self.rect.x - player_pos[0]) <= self.attack_range and abs(self.rect.y - player_pos[1]) <= self.attack_range:
+        if (
+            abs(self.rect.x - player_pos[0]) <= self.attack_range
+            and abs(self.rect.y - player_pos[1]) <= self.attack_range
+        ):
             in_range = True
         return in_range
 

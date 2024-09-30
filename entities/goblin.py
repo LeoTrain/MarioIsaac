@@ -1,5 +1,8 @@
+import random
 import time
+
 from ..entities.enemy import Enemy
+
 
 class Goblin(Enemy):
     def __init__(self, display, sprite_sheet_path):
@@ -28,8 +31,8 @@ class Goblin(Enemy):
         self.image = self.sprites["idle_down"][0]
         self.current_frame_index = 0
         self.speed = 1
-        self.life_points = 5
+        self.life_points = random.randint(5, 8)
         self.attack_range = 100
         self.attack_power = 1
         self.attack_start_time = time.time()
-
+        self.xp_value = self.life_points + random.randint(1, 3)
