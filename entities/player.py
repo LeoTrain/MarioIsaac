@@ -1,6 +1,8 @@
 import pygame
+
 from ..entities.base_character import BaseCharacter
 from ..logic.experience import Xp
+
 
 class Player(BaseCharacter):
     def __init__(self, display, sprite_sheet_path):
@@ -60,3 +62,23 @@ class Player(BaseCharacter):
 
     def update(self):
         self.animation_controller.update_sprite()
+
+    def draw_xp_bar(self, screen):
+        bar_width = 200
+        bar_height = 20
+        bar_x = 50
+        bar_y = 50
+        background_color = (50, 50, 50)
+        xp_color = (0, 0, 200)
+        xp_ratio = self.xp.now_xp / self.xp.current_xp_cap
+        pygame.draw.rect(
+            screen, background_color, (bar_x, bar_y, bar_width, bar_height)
+        )
+        pygame.draw.rect(
+            screen, xp_color, (bar_x, bar_y, bar_width * xp_ratio, bar_height)
+        )
+        font = pygame.font.SysFont(None, 30)
+        level_text = font.render(f"Level: {self.xp.now_level}", True, (255, 255, 255))
+        screen.blit(
+            level_text, (bar_x, bar_y - 30)
+        )

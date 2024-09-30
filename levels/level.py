@@ -87,6 +87,7 @@ class Level(CollisionHandler):
         self.surface.fill((92, 82, 71))
         self.game_map.render(self.surface, self.camera_offset_x, self.camera_offset_y)
         self.player.draw(self.camera_offset_x, self.camera_offset_y)
+        self.player.draw_xp_bar(self.surface)
         for enemy in self.enemies:
             enemy.draw(self.camera_offset_x, self.camera_offset_y)
         self._draw_hearts()

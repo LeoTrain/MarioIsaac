@@ -11,8 +11,10 @@ class Xp:
     def next_level(self):
         if self.now_level + 1 <= self.max_level:
             self.now_level += 1
-            self.now_xp = 0
+            self.now_xp = self.now_xp - self.current_xp_cap
             self.current_xp_cap = self.calculate_new_xp_cap()
+        else:
+            self.now_xp = self.current_xp_cap
 
     def calculate_new_xp_cap(self) -> int:
         return self.xp_cap * self.fibi[self.now_level - 1]
@@ -20,7 +22,6 @@ class Xp:
     def add_xp(self, amount: int) -> None:
         self.now_xp += amount
         if self.now_xp >= self.current_xp_cap:
-            self.now_xp = self.current_xp_cap
             self.next_level()
 
     def create_fibi(self) -> None:
