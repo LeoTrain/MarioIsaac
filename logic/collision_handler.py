@@ -1,5 +1,6 @@
 import pygame
 
+
 class CollisionHandler:
     def __init__(self, player, collision_tiles, enemies, collision_cooldown=500):
         self.player = player
@@ -79,15 +80,34 @@ class CollisionHandler:
                 self.player.can_move_down = True
         return collision_detected
 
+    def _handle_enemy_tile_collision(self, entity):
+        for tile in self.collision_tiles:
+            if pygame.sprite.collide_mask(entity, tile):
+                if entity.last_pressed_direction == "right":
+                    overlap = entity.rect.right - tile.rect.left
+                    if overlap > 0:
+                        entity.rect.right = tile.rect.left
+                elif entity.last_pressed_direction == "left":
+                    overlap = tile.rect.right - entity.rect.left
+                    if overlap > 0:
+                        entity.rect.left = tile.rect.right
+                elif entity.last_pressed_direction == "down":
+                    overlap = entity.rect.bottom - tile.rect.top
+                    if overlap > 0:
+                        entity.rect.bottom = tile.rect.top
+                elif entity.last_pressed_direction == "up":
+                    overlap = tile.rect.bottom - entity.rect.top
+                    if overlap > 0:
+                        entity.rect.top = tile.rect.bottom
 
     def _handle_goblins_collision(self) -> None:
         for entity in self.enemies:
-            for tile in self.collision_tiles:
-                if pygame.sprite.collide_mask(entity, tile):
-                    pass
+            self._handle_enemy_tile_collision(entity)
+
             if pygame.sprite.collide_mask(entity, self.player):
                 if entity.can_attack():
                     entity.attack(self.player)
+
             for other_entity in self.enemies:
                 if other_entity is not entity:
                     if pygame.sprite.collide_mask(entity, other_entity):
@@ -96,3 +116,7 @@ class CollisionHandler:
                         elif entity.rect.centerx > other_entity.rect.centerx:
                             entity.rect.left = other_entity.rect.right
 
+                        if entity.rect.centery < other_entity.rect.centery:
+                            entity.rect.bottom = other_entity.rect.top
+                        elif entity.rect.centery > other_entity.rect.centery:
+                            entity.rect.top = other_entity.rect.bottom
