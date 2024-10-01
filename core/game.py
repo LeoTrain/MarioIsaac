@@ -21,39 +21,6 @@ class Game:
         self.main_menu_active = True
         self.event_handler = EventHandler(self.display, self.level)
 
-    def handle_player_movement(self):
-        keys = pygame.key.get_pressed()
-        if keys[pygame.K_a]:
-            self.level.player.move(-1, 0)
-            self.level.player.current_x_direction = "left"
-            self.level.player.set_direction("left")
-            self.level.player.current_state = "run"
-        elif keys[pygame.K_d]:
-            self.level.player.move(1, 0)
-            self.level.player.current_x_direction = "right"
-            self.level.player.set_direction("right")
-            self.level.player.current_state = "run"
-        elif keys[pygame.K_w]:
-            self.level.player.move(0, -1)
-            self.level.player.current_y_direction = "up"
-            self.level.player.set_direction("up")
-            self.level.player.current_state = "run"
-        elif keys[pygame.K_s]:
-            self.level.player.move(0, 1)
-            self.level.player.current_y_direction = "down"
-            self.level.player.set_direction("down")
-            self.level.player.current_state = "run"
-        else:
-            if self.level.player.in_attack:
-                if self.level.player.attack_counter < 25:
-                    self.level.player.attack_counter += 1
-                    self.level.player.current_state = "attack"
-                else:
-                    self.level.player.attack_counter = 0
-                    self.level.player.in_attack = False
-            else:
-                self.level.player.current_state = "idle"
-
     def run(self):
         while self.running:
             if self.main_menu_active and not self.level_active:
@@ -65,7 +32,6 @@ class Game:
                     self.level.reset_level()
             elif self.level_active and not self.main_menu_active:
                 self.event_handler.handle()
-                self.handle_player_movement()
                 self.level.update()
                 self.level.render()
 

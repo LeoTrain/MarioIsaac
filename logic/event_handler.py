@@ -10,6 +10,39 @@ class EventHandler:
         self.death_screen = DeathScreen(display)
         self.winner_screen = WinnerScreen(display)
 
+    def handle_player_movement(self):
+        keys = pygame.key.get_pressed()
+        if keys[pygame.K_a]:
+            self.level.player.move(-1, 0)
+            self.level.player.current_x_direction = "left"
+            self.level.player.set_direction("left")
+            self.level.player.current_state = "run"
+        elif keys[pygame.K_d]:
+            self.level.player.move(1, 0)
+            self.level.player.current_x_direction = "right"
+            self.level.player.set_direction("right")
+            self.level.player.current_state = "run"
+        elif keys[pygame.K_w]:
+            self.level.player.move(0, -1)
+            self.level.player.current_y_direction = "up"
+            self.level.player.set_direction("up")
+            self.level.player.current_state = "run"
+        elif keys[pygame.K_s]:
+            self.level.player.move(0, 1)
+            self.level.player.current_y_direction = "down"
+            self.level.player.set_direction("down")
+            self.level.player.current_state = "run"
+        else:
+            if self.level.player.in_attack:
+                if self.level.player.attack_counter < 25:
+                    self.level.player.attack_counter += 1
+                    self.level.player.current_state = "attack"
+                else:
+                    self.level.player.attack_counter = 0
+                    self.level.player.in_attack = False
+            else:
+                self.level.player.current_state = "idle"
+
     def handle_event(self, event):
         self.handle_custom_events(event)
         self.handle_pygame_events(event)
@@ -71,3 +104,4 @@ class EventHandler:
     def handle(self):
         for event in pygame.event.get():
             self.handle_event(event)
+        self.handle_player_movement()
