@@ -21,15 +21,24 @@ class Game:
 
     def run(self):
         while self.running:
-            if self.main_menu_active and not self.level_active:
-                menu_choice = self.main_menu.run()
-                if menu_choice == "start_game":
-                    self.main_menu_active = False
-                    self.level_active = True
-                    self.level.reset_level()
-            elif self.level_active and not self.main_menu_active:
-                self.event_handler.handle()
-                self.level.update()
-                self.level.render()
+            if self.main_menu_active:
+                self.handle_main_menu()
+            elif self.level_active:
+                self.handle_level()
             self.clock.tick(self.fps)
         pygame.quit()
+
+    def handle_main_menu(self):
+        menu_choice = self.main_menu.run()
+        if menu_choice == "start_game":
+            self.start_level()
+
+    def handle_level(self):
+        self.event_handler.handle()
+        self.level.update()
+        self.level.render()
+
+    def start_level(self):
+        self.main_menu_active = False
+        self.level_active = True
+        self.level.reset_level()
