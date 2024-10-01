@@ -32,7 +32,6 @@ class Level():
         self.player = Player(self.surface, sprite_sheet_path)
         starting_position = self.game_map.get_player_starting_position()
         self.player.rect.topleft = starting_position[0], starting_position[1]
-        print(starting_position)
         self.player.mask = pygame.mask.from_surface(self.player.image)
 
     def _initialise_enemies(self):

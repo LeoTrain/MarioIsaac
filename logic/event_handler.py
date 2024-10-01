@@ -1,0 +1,73 @@
+import pygame
+
+from ..logic.event_dick import event_dick
+from ..core.death_screen import DeathScreen
+from ..core.winner_screen import WinnerScreen
+
+class EventHandler:
+    def __init__(self, display, level) -> None:
+        self.level = level
+        self.death_screen = DeathScreen(display)
+        self.winner_screen = WinnerScreen(display)
+
+    def handle_event(self, event):
+        self.handle_custom_events(event)
+        self.handle_pygame_events(event)
+
+    def handle_pygame_events(self, event):
+        if event.type == pygame.QUIT:
+            self.running = False
+        elif event.type == pygame.KEYDOWN:
+            self.handle_keydown_events(event)
+
+    def handle_keydown_events(self, event):
+        if event.key == pygame.K_o:
+            self.level.player.draw_rect_border = not self.level.player.draw_rect_border
+        elif event.key == pygame.K_p:
+            self.level.player.color_mask = not self.level.player.color_mask
+        elif event.key == pygame.K_k:
+            for entity in self.level.enemies:
+                entity.draw_rect_border = not entity.draw_rect_border
+        elif event.key == pygame.K_l:
+            for entity in self.level.enemies:
+                entity.color_mask = not entity.color_mask
+        elif event.key == pygame.K_SPACE:
+            self.level.player.in_attack = True
+            self.level.player.attack(self.level.enemies)
+
+    def handle_death_state(self, state):
+        if state == "start_game":
+            self.level.reset_level()
+            self.level_active = True
+            self.main_menu_active = False
+        elif state == "main_menu":
+            self.level_active = False
+            self.main_menu_active = True
+        return False
+
+    def handle_custom_events(self, event):
+        if event.type == event_dick["player_dead"]:
+            death_screen_on = True
+            while death_screen_on:
+                state = self.death_screen.handle_input()
+                if state:
+                    death_screen_on = self.handle_death_state(state)
+                else:
+                    self.level.render()
+                    self.death_screen.render()
+        elif event.type == event_dick["enemy_dead"]:
+            for i, enemy in enumerate(self.level.enemies):
+                if enemy.life_points <= 0:
+                    self.level.enemies.pop(i)
+        elif event.type == event_dick["player_won"]:
+            winner_screen_on = True
+            while winner_screen_on:
+                state = self.winner_screen.handle_input()
+                if state:
+                    winner_screen_on = self.handle_death_state(state)
+                else:
+                    self.level.render()
+                    self.winner_screen.render()
+    def handle(self):
+        for event in pygame.event.get():
+            self.handle_event(event)

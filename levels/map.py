@@ -56,7 +56,6 @@ class Map:
         positions = []
         scale_factor = self._calculate_scale_factor()
         for obj in self.tmx_data.objects:
-            print(obj)
             if enemy_name in obj.name:
                 x_start = obj.x * scale_factor
                 y_start = obj.y * scale_factor
