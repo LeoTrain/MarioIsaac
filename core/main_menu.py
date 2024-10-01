@@ -40,3 +40,10 @@ class MainMenu:
                         pygame.quit()
                         sys.exit()
         return None
+
+    def run(self):
+        menu_choice = None
+        while menu_choice is None:
+            menu_choice = self.handle_input()
+            self.render()
+        return menu_choice

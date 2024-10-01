@@ -3,8 +3,9 @@ import sys
 
 
 class WinnerScreen:
-    def __init__(self, surface):
+    def __init__(self, surface, level):
         self.surface = surface
+        self.level = level
         self.font = pygame.font.Font(None, 50)
         self.options = ["Next level", "Return To Menu", "Quit"]
         self.selected_index = 0
@@ -68,3 +69,11 @@ class WinnerScreen:
                         pygame.quit()
                         sys.exit()
         return None
+
+    def run(self):
+        winner_choice = None
+        while winner_choice is None:
+            self.level.render()
+            winner_choice = self.handle_input()
+            self.render()
+        return winner_choice

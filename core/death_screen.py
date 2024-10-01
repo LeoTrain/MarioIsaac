@@ -2,8 +2,9 @@ import pygame
 import sys
 
 class DeathScreen:
-    def __init__(self, surface):
+    def __init__(self, surface, level):
         self.surface = surface
+        self.level = level
         self.font = pygame.font.Font(None, 50)
         self.options = ["Restart Game", "Return To Menu", "Quit"]
         self.selected_index = 0
@@ -68,3 +69,10 @@ class DeathScreen:
                         sys.exit()
         return None
 
+    def run(self):
+        death_choice = None
+        while death_choice is None:
+            self.level.render()
+            death_choice = self.handle_input()
+            self.render()
+        return death_choice

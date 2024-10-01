@@ -9,9 +9,7 @@ class Game:
     def __init__(self) -> None:
         pygame.init()
         self.display_width, self.display_height = 800, 600
-        self.display = pygame.display.set_mode(
-            (self.display_width, self.display_height)
-        )
+        self.display = pygame.display.set_mode((self.display_width, self.display_height))
         self.running = True
         self.clock = pygame.time.Clock()
         self.fps = 60
@@ -19,14 +17,13 @@ class Game:
         self.level_active = False
         self.main_menu = MainMenu(self.display, "MarioIsaac/assets/tileset/menu_bg.jpg")
         self.main_menu_active = True
-        self.event_handler = EventHandler(self.display, self.level)
+        self.event_handler = EventHandler(self.display, self.level, self)
 
     def run(self):
         while self.running:
             if self.main_menu_active and not self.level_active:
-                if not self.main_menu.handle_input():
-                    self.main_menu.render()
-                else:
+                menu_choice = self.main_menu.run()
+                if menu_choice == "start_game":
                     self.main_menu_active = False
                     self.level_active = True
                     self.level.reset_level()
@@ -34,6 +31,5 @@ class Game:
                 self.event_handler.handle()
                 self.level.update()
                 self.level.render()
-
             self.clock.tick(self.fps)
         pygame.quit()
