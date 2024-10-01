@@ -24,7 +24,7 @@ class Game:
             if self.main_menu_active:
                 self.handle_main_menu()
             elif self.level_active:
-                self.handle_level()
+                self.level.run(self.event_handler)
             self.clock.tick(self.fps)
         pygame.quit()
 
@@ -32,11 +32,6 @@ class Game:
         menu_choice = self.main_menu.run()
         if menu_choice == "start_game":
             self.start_level()
-
-    def handle_level(self):
-        self.event_handler.handle()
-        self.level.update()
-        self.level.render()
 
     def start_level(self):
         self.main_menu_active = False

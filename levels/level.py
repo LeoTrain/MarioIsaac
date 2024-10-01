@@ -15,12 +15,16 @@ class Level:
         self.camera_offset_x = self.player.rect.topleft[0]
         self.camera_offset_y = self.player.rect.topleft[1]
 
+    def run(self, event_handler):
+        self.update()
+        event_handler.handle()
+        self.render()
+
     def _load_map(self, map_path):
         self.game_map = Map(map_path)
         self.collision_tiles = self.game_map.get_collision_tiles(self.surface)
 
     def _initialise_components(self):
-        """Initialise les différents composants du niveau."""
         self._initialise_images()
         self._initialise_player()
         self._initialise_enemies()
@@ -28,14 +32,12 @@ class Level:
         self.all_sprites = pygame.sprite.Group()
 
     def _initialise_images(self):
-        """Charge et redimensionne les images des cœurs."""
         heart_alive_image = pygame.image.load("MarioIsaac/assets/tileset/hearts/heart_red.png")
         heart_dead_image = pygame.image.load("MarioIsaac/assets/tileset/hearts/heart_black.png")
         self.heart_alive_image = pygame.transform.scale(heart_alive_image, (32, 32))
         self.heart_dead_image = pygame.transform.scale(heart_dead_image, (32, 32))
 
     def _initialise_player(self):
-        """Initialise le joueur et sa position sur la carte."""
         sprite_sheet_path = "MarioIsaac/assets/sprites/base_character/my_base_character_v3.png"
         self.player = Player(self.surface, sprite_sheet_path)
         starting_position = self.game_map.get_player_starting_position()
@@ -43,7 +45,6 @@ class Level:
         self.player.mask = pygame.mask.from_surface(self.player.image)
 
     def _initialise_enemies(self):
-        """Initialise les ennemis et leurs positions sur la carte."""
         sprite_sheet_path = "MarioIsaac/assets/sprites/orcs/my_goblin_v1.png"
         starting_positions = self.game_map.get_enemy_starting_position("goblin")
         self.enemies = [
@@ -52,7 +53,6 @@ class Level:
         ]
 
     def reset_level(self):
-        """Réinitialise le niveau avec un écran de chargement."""
         font = pygame.font.Font(None, 36)
         loading_screen = LoadingScreen(self.surface, font, total_steps=4)
         steps = [
@@ -66,12 +66,10 @@ class Level:
             loading_screen.update()
 
     def _update_camera(self):
-        """Met à jour la position de la caméra pour suivre le joueur."""
         self.camera_offset_x = self.player.rect.centerx - self.surface.get_width() // 2
         self.camera_offset_y = self.player.rect.centery - self.surface.get_height() // 2
 
     def _draw_hearts(self):
-        """Dessine les cœurs représentant les points de vie du joueur."""
         dead_hearts = self.player.starting_life_points - self.player.life_points
         heart_width = self.heart_alive_image.get_width()
         x_pos = self.surface.get_width() - heart_width
@@ -83,8 +81,7 @@ class Level:
             self.surface.blit(self.heart_dead_image, (x_pos, 50))
 
     def render(self):
-        """Rendu complet du niveau (carte, joueur, ennemis, et interface utilisateur)."""
-        self.surface.fill((92, 82, 71))  # Couleur de fond
+        self.surface.fill((92, 82, 71))
         self.game_map.render(self.surface, self.camera_offset_x, self.camera_offset_y)
         self.player.draw(self.camera_offset_x, self.camera_offset_y)
         self.player.draw_xp_bar(self.surface)
@@ -93,12 +90,10 @@ class Level:
         self._draw_hearts()
 
     def did_player_win(self):
-        """Vérifie si tous les ennemis sont éliminés."""
         if not self.enemies:
             pygame.event.post(pygame.event.Event(event_dick["player_won"]))
 
     def update(self):
-        """Met à jour les éléments du niveau."""
         self.player.update()
         for enemy in self.enemies:
             enemy.update(self.player.rect.topleft)
