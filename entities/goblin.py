@@ -36,3 +36,7 @@ class Goblin(Enemy):
         self.attack_power = 1
         self.attack_start_time = time.time()
         self.xp_value = self.life_points + random.randint(1, 3)
+
+    def with_position(self, position):
+        self.rect.topleft = position
+        return self
