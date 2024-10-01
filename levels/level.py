@@ -3,22 +3,23 @@ import pygame
 from ..entities.player import Player
 from ..entities.goblin import Goblin
 from ..levels.map import Map
-from ..logic.collision_handler import CollisionHandler
+from ..logic.collision_manager import CollisionManager
 from ..logic.event_dick import event_dick
 from ..core.loading_screen import LoadingScreen
 
 
-class Level(CollisionHandler):
+class Level():
     def __init__(self, surface):
         self.surface = surface
         self.game_map = Map("MarioIsaac/maps/level_one.tmx")
+        self.collision_tiles = self.game_map.get_collision_tiles(surface)
         self._initialise_player()
         self._initialise_enemies()
         self._initialise_images()
-        super().__init__(self.player, self.game_map.get_collision_tiles(surface), self.enemies)
         self.all_sprites = pygame.sprite.Group()
         self.camera_offset_x = self.player.rect.topleft[0]
         self.camera_offset_y = self.player.rect.topleft[1]
+        self.collision_manager = CollisionManager()
 
     def _initialise_images(self):
         heart_alive_image = pygame.image.load("MarioIsaac/assets/tileset/hearts/heart_red.png")
@@ -101,7 +102,7 @@ class Level(CollisionHandler):
         self.player.update()
         for enemy in self.enemies:
             enemy.update((self.player.rect.x, self.player.rect.y))
-        self.handle_collisions()
+        self.collision_manager.handle_collisions([self.player] + self.enemies, self.collision_tiles)
         self.did_player_win()
         self._update_camera()
         pygame.display.update()

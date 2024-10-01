@@ -1,3 +1,4 @@
+import time
 import pygame
 
 from ..entities.base_character import BaseCharacter
@@ -34,12 +35,21 @@ class Player(BaseCharacter):
         self.attack_power = 3
         self.in_attack = False
         self.xp = Xp()
+        self.attack_start_time = time.time()
 
     def set_direction(self, direction):
         self.last_pressed_direction = direction
 
+    def can_attack(self):
+        can_attack = False
+        time_passed = time.time() - self.attack_start_time
+        if time_passed > 2:
+            can_attack = True
+        return can_attack
+
     def attack(self, enemies):
         super().attack()
+        self.attack_start_time = time.time()
         attack_rect = self.rect.copy()
         attack_size = 20
 

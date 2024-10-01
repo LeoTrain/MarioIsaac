@@ -27,7 +27,7 @@ class CollisionHandler:
                 if vertical_collided or horizontal_collided:
                     self.is_colliding = True
 
-        self._handle_goblins_collision()
+        self._handle_enemy_collisions()
 
     def _handle_horizontal_collision(self) -> bool:
         collision_detected = False
@@ -44,14 +44,18 @@ class CollisionHandler:
                     overlap = self.player.rect.right - tile.rect.left
                     if overlap > 0:
                         self.player.rect.left = tile.rect.right - player_center
-                    self.player.can_move_left = False
+                        self.player.can_move_left = False
                 collision_detected = True
 
         if not collision_detected:
             if self.player.last_pressed_direction == "right":
                 self.player.can_move_left = True
+                self.player.can_move_up = True
+                self.player.can_move_down = True
             elif self.player.last_pressed_direction == "left":
                 self.player.can_move_right = True
+                self.player.can_move_up = True
+                self.player.can_move_down = True
 
         return collision_detected
 
@@ -67,56 +71,86 @@ class CollisionHandler:
                         self.player.can_move_down = False
 
                 elif self.player.last_pressed_direction == "up":
-                    overlap = tile.rect.bottom - self.player.rect.top
+                    overlap = tile.rect.bottom - self.player.rect.top - player_center
                     if overlap > 0:
-                        self.player.rect.top = tile.rect.bottom - player_center
+                        self.player.rect.top = tile.rect.bottom
                         self.player.can_move_up = False
                 collision_detected = True
 
         if not collision_detected:
             if self.player.last_pressed_direction == "down":
                 self.player.can_move_up = True
+                self.player.can_move_left = True
+                self.player.can_move_right = True
             elif self.player.last_pressed_direction == "up":
                 self.player.can_move_down = True
+                self.player.can_move_left = True
+                self.player.can_move_right = True
         return collision_detected
 
-    def _handle_enemy_tile_collision(self, entity):
+    def _handle_horizontal_enemy_collision(self, enemy) -> bool:
+        collision_detected = False
+        enemy_center = enemy.rect.width * 0.2
         for tile in self.collision_tiles:
-            if pygame.sprite.collide_mask(entity, tile):
-                if entity.last_pressed_direction == "right":
-                    overlap = entity.rect.right - tile.rect.left
+            if pygame.sprite.collide_mask(enemy, tile):
+                if enemy.last_pressed_direction == "right":
+                    overlap = enemy.rect.right - tile.rect.left
                     if overlap > 0:
-                        entity.rect.right = tile.rect.left
-                elif entity.last_pressed_direction == "left":
-                    overlap = tile.rect.right - entity.rect.left
+                        enemy.rect.right = tile.rect.left
+                        enemy.can_move_right = False
+                elif enemy.last_pressed_direction == "left":
+                    overlap = enemy.rect.left - tile.rect.right
                     if overlap > 0:
-                        entity.rect.left = tile.rect.right
-                elif entity.last_pressed_direction == "down":
-                    overlap = entity.rect.bottom - tile.rect.top
+                        enemy.rect.left = tile.rect.right
+                        enemy.can_move_left = False
+                collision_detected = True
+
+        if not collision_detected:
+            if enemy.last_pressed_direction == "right":
+                enemy.can_move_left = True
+                enemy.can_move_up = True
+                enemy.can_move_down = True
+            elif enemy.last_pressed_direction == "left":
+                enemy.can_move_right = True
+                enemy.can_move_up = True
+                enemy.can_move_down = True
+
+        return collision_detected
+
+    def _handle_vertical_enemy_collision(self, enemy) -> bool:
+        collision_detected = False
+        enemy_center = enemy.rect.height * 0.2
+        for tile in self.collision_tiles:
+            if pygame.sprite.collide_mask(enemy, tile):
+                if enemy.last_pressed_direction == "down":
+                    overlap = enemy.rect.bottom - tile.rect.top
                     if overlap > 0:
-                        entity.rect.bottom = tile.rect.top
-                elif entity.last_pressed_direction == "up":
-                    overlap = tile.rect.bottom - entity.rect.top
+                        enemy.rect.bottom = tile.rect.top
+                        enemy.can_move_down = False
+                elif enemy.last_pressed_direction == "up":
+                    overlap = tile.rect.bottom - enemy.rect.top
                     if overlap > 0:
-                        entity.rect.top = tile.rect.bottom
+                        enemy.rect.top = tile.rect.bottom
+                        enemy.can_move_up = False
+                collision_detected = True
 
-    def _handle_goblins_collision(self) -> None:
-        for entity in self.enemies:
-            self._handle_enemy_tile_collision(entity)
+        if not collision_detected:
+            if enemy.last_pressed_direction == "down":
+                enemy.can_move_up = True
+                enemy.can_move_left = True
+                enemy.can_move_right = True
+            elif enemy.last_pressed_direction == "up":
+                enemy.can_move_down = True
+                enemy.can_move_left = True
+                enemy.can_move_right = True
 
-            if pygame.sprite.collide_mask(entity, self.player):
-                if entity.can_attack():
-                    entity.attack(self.player)
+        return collision_detected
 
-            for other_entity in self.enemies:
-                if other_entity is not entity:
-                    if pygame.sprite.collide_mask(entity, other_entity):
-                        if entity.rect.centerx < other_entity.rect.centerx:
-                            entity.rect.right = other_entity.rect.left
-                        elif entity.rect.centerx > other_entity.rect.centerx:
-                            entity.rect.left = other_entity.rect.right
-
-                        if entity.rect.centery < other_entity.rect.centery:
-                            entity.rect.bottom = other_entity.rect.top
-                        elif entity.rect.centery > other_entity.rect.centery:
-                            entity.rect.top = other_entity.rect.bottom
+    def _handle_enemy_collisions(self) -> None:
+        for enemy in self.enemies:
+            vertical_collided = self._handle_vertical_enemy_collision(enemy)
+            horizontal_collided = self._handle_horizontal_enemy_collision(enemy)
+            if not vertical_collided and not horizontal_collided:
+                enemy.is_colliding = False
+            else:
+                enemy.is_colliding = True
