@@ -44,8 +44,6 @@ class BaseCharacter(MovingTile):
     def _drawLifeBar(self, offset_x, offest_y):
         barHeight = 5
         barLength = self.inflated_rect.width
-        if self.isPlayer():
-            print(self.life_points, self.max_life_points)
         full_rect = pygame.Rect((self.inflated_rect.left - offset_x, self.inflated_rect.top + barHeight - offest_y), (barLength, barHeight))
         life_rect = pygame.Rect((self.inflated_rect.left - offset_x, self.inflated_rect.top + barHeight - offest_y), (barLength * (self.life_points / self.max_life_points), barHeight))
         pygame.draw.rect(self.display, (0, 0, 0), full_rect)
