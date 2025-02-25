@@ -10,6 +10,8 @@ class Game:
     def __init__(self) -> None:
         pygame.init()
         pygame.mixer.init()
+        pygame.mixer.music.load("MarioIsaac/assets/sounds/music/song1.mp3")
+        pygame.mixer.music.play(-1)
         self.display_width, self.display_height = 800, 600
         self.display = pygame.display.set_mode(
             (self.display_width, self.display_height)
