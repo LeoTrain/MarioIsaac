@@ -7,18 +7,35 @@ class GameEngine:
         pygame.display.set_caption(title)
         self.clock = pygame.time.Clock()
         self.running = True
+        self.all_sprites = pygame.sprite.Group()
+        self.current_scene = None
+        self.scene_stack = []
+
+    def add_object(self, obj):
+        self.all_sprites.add(obj)
+
+    def change_scene(self, scene):
+        if self.current_scene:
+            self.current_scene.exit()
+        self.scene_stack.append(self.current_scene)
+        self.current_scene = scene
+        self.current_scene.enter()
+
+    def pop_scene(self):
+        if len(self.scene_stack) > 0:
+            self.current_scene.exit()
+            self.current_scene = self.scene_stack.pop()
+            self.current_scene.enter()
 
     def handle_events(self):
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                self.running = False
+        self.current_scene.handle_events()
+        self.running = self.current_scene.running
 
     def update(self, dt):
-        pass
+        self.current_scene.update(dt)
 
     def render(self):
-        self.screen.fill((0, 0, 0))
-        pygame.display.flip()
+        self.current_scene.render()
 
     def run(self, fps=60):
         while self.running:
