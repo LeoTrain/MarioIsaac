@@ -7,12 +7,10 @@ class GameScene(Scene):
         super().__init__(engine)
 
     def enter(self):
-        print("Entrée dans le jeu")
         self.player = MovableObject(100, 100, 50, 50, (255, 0, 0))
         self.engine.add_object(self.player)
 
     def exit(self):
-        print("Quitter le jeu")
         self.engine.remove_object(self.player)
 
     def handle_events(self):
